@@ -112,26 +112,37 @@ SecMain (VOID)
   SaveAndSetDebugTimerInterrupt (TRUE);
 #endif
 
+  DEBUG ((EFI_D_WARN, "SEC: 1 debug agent ok\n"));
+
   // Initialize Memory
+  DEBUG ((EFI_D_WARN, "SEC: 2 InitializeMemory...\n"));
   Status = InitializeMemory ();
   if (EFI_ERROR (Status)) {
+    DEBUG ((EFI_D_ERROR, "SEC: InitializeMemory FAILED %r\n", Status));
     return;
   }
+  DEBUG ((EFI_D_WARN, "SEC: 3 memory/MMU ok\n"));
 
   // Build CPU HOB
   BuildCpuHob (ArmGetPhysicalAddressBits (), PcdGet8 (PcdPrePiCpuIoSize));
+  DEBUG ((EFI_D_WARN, "SEC: 4 cpu hob ok\n"));
 
   // Set the Boot Mode
   SetBootMode (BOOT_WITH_DEFAULT_SETTINGS);
 
   // Initialize Platform HOBs
+  DEBUG ((EFI_D_WARN, "SEC: 5 PlatformPeim...\n"));
   Status = PlatformPeim ();
   if (EFI_ERROR (Status)) {
+    DEBUG ((EFI_D_ERROR, "SEC: PlatformPeim FAILED %r\n", Status));
     return;
   }
+  DEBUG ((EFI_D_WARN, "SEC: 6 PlatformPeim ok\n"));
 
   // Run Library Cconstructors
+  DEBUG ((EFI_D_WARN, "SEC: 7 lib constructors...\n"));
   ProcessLibraryConstructorList ();
+  DEBUG ((EFI_D_WARN, "SEC: 8 constructors ok\n"));
 
   // Decompress all FVs
   Status = DecompressFirstFv ();
@@ -141,6 +152,7 @@ SecMain (VOID)
   }
 
   // Load DXE Core
+  DEBUG ((EFI_D_WARN, "SEC: 9 FV ok, loading DXE core...\n"));
   Status = LoadDxeCoreFromFv (NULL, 0);
   if (EFI_ERROR (Status)) {
     DEBUG ((EFI_D_ERROR, "Failed to Load DXE Core! Status = %r\n", Status));
