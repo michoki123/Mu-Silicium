@@ -1,0 +1,22 @@
+name: Build UEFI (un dispositivo)
+on:
+  workflow_dispatch:
+    inputs:
+      device:
+        description: "Codename (spes, devon, ...)"
+        required: true
+        default: "devon"
+env:
+  CI_BUILD: true
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build
+        run: bash ./setup_env.sh -p apt && python3 build_uefi.py -d "${{ github.event.inputs.device }}" -r DEBUG
+      - name: Subir imagen
+        uses: actions/upload-artifact@v7
+        with:
+          name: uefi-${{ github.event.inputs.device }}
+          path: ./Mu-*
