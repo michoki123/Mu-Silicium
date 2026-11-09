@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PanelDescription>TXD ILI7807S DSI Video Mode Panel (1080x2400 24bpp) - Moto G32 devon</PanelDescription>
+<Group id="Active Timing">
+ <HorizontalActive>1080</HorizontalActive>
+ <HorizontalFrontPorch>20</HorizontalFrontPorch>
+ <HorizontalBackPorch>20</HorizontalBackPorch>
+ <HorizontalSyncPulse>4</HorizontalSyncPulse>
+ <HorizontalSyncSkew>0</HorizontalSyncSkew>
+ <HorizontalLeftBorder>0</HorizontalLeftBorder>
+ <HorizontalRightBorder>0</HorizontalRightBorder>
+ <VerticalActive>2400</VerticalActive>
+ <VerticalFrontPorch>42</VerticalFrontPorch>
+ <VerticalBackPorch>42</VerticalBackPorch>
+ <VerticalSyncPulse>2</VerticalSyncPulse>
+ <VerticalSyncSkew>0</VerticalSyncSkew>
+ <VerticalTopBorder>0</VerticalTopBorder>
+ <VerticalBottomBorder>0</VerticalBottomBorder>
+ <InvertDataPolarity>False</InvertDataPolarity>
+ <InvertVsyncPolairty>False</InvertVsyncPolairty>
+ <InvertHsyncPolarity>False</InvertHsyncPolarity>
+ <BorderColor>0x0</BorderColor>
+</Group>
+<Group id="Display Interface">
+ <InterfaceType>8</InterfaceType>
+ <InterfaceColorFormat>3</InterfaceColorFormat>
+</Group>
+<Group id="DSI Interface">
+ <DSIChannelId>1</DSIChannelId>
+ <DSIVirtualId>0</DSIVirtualId>
+ <DSIColorFormat>36</DSIColorFormat>
+ <DSITrafficMode>1</DSITrafficMode>
+ <DSIDSCEnable>True</DSIDSCEnable>
+ <DSIDSCMajor>1</DSIDSCMajor>
+ <DSIDSCMinor>1</DSIDSCMinor>
+ <DSIDSCScr>0</DSIDSCScr>
+ <DSIDSCProfileID>4</DSIDSCProfileID>
+ <DSIDSCSliceWidth>540</DSIDSCSliceWidth>
+ <DSIDSCSliceHeight>10</DSIDSCSliceHeight>
+ <DSIDSCSlicePerPacket>2</DSIDSCSlicePerPacket>
+ <DSILanes>4</DSILanes>
+   <DSIHsaHseAfterVsVe>False</DSIHsaHseAfterVsVe>
+   <DSILowPowerModeInHFP>False</DSILowPowerModeInHFP>
+   <DSILowPowerModeInHBP>False</DSILowPowerModeInHBP>
+   <DSILowPowerModeInHSA>False</DSILowPowerModeInHSA>
+   <DSILowPowerModeInBLLPEOF>True</DSILowPowerModeInBLLPEOF>
+   <DSILowPowerModeInBLLP>True</DSILowPowerModeInBLLP>
+   <DSIRefreshRate>0x5A0000</DSIRefreshRate>
+ <DSIControllerMapping>
+  00
+ </DSIControllerMapping>
+</Group>
+<DSIInitSequence>
+ 39 FF 78 07 00
+ 15 11 00
+ FF 50
+ 39 FF 78 07 06
+ 15 3E E3
+ 15 80 00
+ 15 4E 64
+ 15 4D 81
+ 15 C7 05
+ 15 48 09
+ 39 FF 78 07 02
+ 15 1B 01
+ 39 FF 78 07 00
+ 39 51 06 47
+ 15 53 2C
+ 15 55 01
+ 15 29 00
+ FF 0A
+</DSIInitSequence>
+<DSITermSequence>
+ 39 FF 78 07 00
+ 15 28 00
+ FF 14
+ 15 10 00
+ FF 78
+</DSITermSequence>
+<TLMMGPIODefaultHigh>0x52</TLMMGPIODefaultHigh>
+<Group id='Backlight Configuration'>
+ <BacklightType>1</BacklightType>
+ <BacklightPmicControlType>2</BacklightPmicControlType>
+ <DisplayResetInfo>0 10 10000 10000 0</DisplayResetInfo>
+</Group>

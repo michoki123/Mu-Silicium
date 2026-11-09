@@ -1,0 +1,13 @@
+devon-port: borrador de puerto de Mu-Silicium para Moto G32 (devon)
+
+Contenido (rutas relativas a la raiz de tu fork de Mu-Silicium):
+  Platforms/Motorola/devonPkg/       copia de spesPkg adaptada (nombres, SMBIOS, PIL ampliado)
+  Resources/Configs/devon.toml       FD en 0x5FC00000, imagen header v3, sin DTB anexado
+  .github/workflows/build-device.yml workflow para compilar desde la pestana Actions
+  extras/Panel_txd_ili7807s_fhdp_vid.xml  solo para usar DisplayDxe propio (no hace falta ahora)
+
+Decisiones de este borrador (todas por verificar en el telefono):
+  - Binarios y ACPI: se reutilizan los de spes (Binaries/spes y Silicium-ACPI .../Xiaomi/spes).
+  - Pantalla: USE_CUSTOM_DISPLAY_DRIVER = 0, usa SimpleFb sobre 0x5C000000 (1080x2400x32).
+  - SOC_TYPE = 0 (Snapdragon 680). Solo cambia el texto de SMBIOS.
+  - header_version = 3 y append_dtb = false: si no arranca, prueba header_version = 4 o append_dtb = true.
