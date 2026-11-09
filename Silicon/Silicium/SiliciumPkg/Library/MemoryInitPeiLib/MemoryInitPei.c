@@ -114,7 +114,7 @@ MemoryPeim (
   UINTN                         Index                                               = 0;
 
   // Show Entry Message
-  DEBUG ((EFI_D_WARN, "MMU In\r"));
+  DEBUG ((EFI_D_WARN, "MMU: in\n"));
 
   // Get Memory Map
   GetMemoryMap (&MemoryDescriptor, &MemoryDescriptorCount);
@@ -143,11 +143,14 @@ MemoryPeim (
   }
 
   // Configure MMU
+  DEBUG ((EFI_D_WARN, "MMU: %u regions, configuring...\n", (UINT32)Index));
   Status = ArmConfigureMmu (MemoryTable, &TranslationTableBase, &TranslationTableSize);
   if (EFI_ERROR (Status)) {
     DEBUG ((EFI_D_ERROR, "Failed to Configure MMU! Status = %r\n", Status));
     return Status;
   }
+
+  DEBUG ((EFI_D_WARN, "MMU: configured\n"));
 
   // Build Memory Type Info HOB
   if (FeaturePcdGet (PcdPrePiProduceMemoryTypeInformationHob)) {

@@ -65,6 +65,7 @@ InitializeMemory (VOID)
   // Save UEFI Memory Details
   UINTN UefiMemoryBase = UefiMemoryRegion.Address;
   UINTN UefiMemorySize = UefiMemoryRegion.Length;
+  DEBUG ((EFI_D_WARN, "SEC: 2a heap base=0x%llx size=0x%llx\n", (UINT64)UefiMemoryBase, (UINT64)UefiMemorySize));
 
   // Verify UEFI Memory Base
   if (UefiMemoryBase == 0 && UefiMemorySize == 0) {
@@ -73,14 +74,19 @@ InitializeMemory (VOID)
   }
 
   // Initialize HOB List
+  DEBUG ((EFI_D_WARN, "SEC: 2b HobConstructor...\n"));
   HobList = HobConstructor ((VOID *)UefiMemoryBase, UefiMemorySize, (VOID *)UefiMemoryBase, (VOID *)(UefiMemoryBase + UefiMemorySize));
   PrePeiSetHobList (HobList);
+  DEBUG ((EFI_D_WARN, "SEC: 2c hob list ok\n"));
 
   // Initialize MMU & Memory HOBs
+  DEBUG ((EFI_D_WARN, "SEC: 2d MemoryPeim...\n"));
   Status = MemoryPeim (UefiMemoryBase, UefiMemorySize);
   if (EFI_ERROR (Status)) {
+    DEBUG ((EFI_D_ERROR, "SEC: MemoryPeim FAILED %r\n", Status));
     return Status;
   }
+  DEBUG ((EFI_D_WARN, "SEC: 2e MemoryPeim done\n"));
 
   // Build Stack HOB
   BuildStackHob (FixedPcdGet64 (PcdCPUCoresStackBase), FixedPcdGet32 (PcdCPUCorePrimaryStackSize));
