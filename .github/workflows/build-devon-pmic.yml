@@ -1,0 +1,32 @@
+name: Build UEFI devon (pmic)
+on:
+  workflow_dispatch:
+env:
+  CI_BUILD: true
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: pmicmot,     pmic: 1, mot: 1, chg: 0 }
+          - { name: pmicmot-chg, pmic: 1, mot: 1, chg: 1 }
+          - { name: nopmic-mot,  pmic: 2, mot: 1, chg: 0 }
+    steps:
+      - uses: actions/checkout@v7
+      - name: Configurar variante
+        run: |
+          f=Platforms/Motorola/devonPkg/devon.dsc
+          set_flag() { sed -i -E "s/(^[[:space:]]*$1[[:space:]]*=[[:space:]]*)[0-9]+/\1$2/" $f; }
+          set_flag SWAP_PMIC ${{ matrix.pmic }}
+          set_flag ADD_MOT ${{ matrix.mot }}
+          set_flag ADD_DEVCHG ${{ matrix.chg }}
+          grep -n -E "SWAP_|DROP_|ADD_" $f
+      - name: Build
+        run: bash ./setup_env.sh -p apt && python3 build_uefi.py -d devon -r DEBUG
+      - name: Subir imagen
+        uses: actions/upload-artifact@v7
+        with:
+          name: uefi-devon-${{ matrix.name }}
+          path: ./Mu-*
