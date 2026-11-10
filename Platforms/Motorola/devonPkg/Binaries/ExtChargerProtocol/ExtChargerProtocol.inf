@@ -1,0 +1,14 @@
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = ExtChargerProtocol
+  FILE_GUID                      = 3A0EF669-0617-4E30-9D40-686A2093DD66
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = EfiEntry
+
+[Binaries.AARCH64]
+  DXE_DEPEX|ExtChargerProtocol.depex|*
+  PE32|ExtChargerProtocol.efi|*
+
+[Depex]
+  TRUE

@@ -32,6 +32,8 @@
   DROP_USB                       = 0
   DROP_BUTTONS                   = 0
   ADD_WDOG                       = 0
+  ADD_MOT                        = 0
+  ADD_DEVCHG                     = 0
 
   #
   # 0 = SM6225

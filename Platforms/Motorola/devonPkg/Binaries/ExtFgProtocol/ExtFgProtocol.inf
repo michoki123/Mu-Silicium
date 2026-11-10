@@ -1,0 +1,14 @@
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = ExtFgProtocol
+  FILE_GUID                      = 4D31F507-F7E9-409A-BDD0-E95D3CB979C1
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = EfiEntry
+
+[Binaries.AARCH64]
+  DXE_DEPEX|ExtFgProtocol.depex|*
+  PE32|ExtFgProtocol.efi|*
+
+[Depex]
+  TRUE

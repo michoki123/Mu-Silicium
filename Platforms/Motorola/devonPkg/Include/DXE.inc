@@ -208,3 +208,15 @@
 !if $(ADD_WDOG) == 1
   INF devonPkg/Binaries/QcomWDogDxe/QcomWDogDxe.inf
 !endif
+
+!if $(ADD_MOT) == 1
+  INF devonPkg/Binaries/ExtChargerProtocol/ExtChargerProtocol.inf
+  INF devonPkg/Binaries/ExtFgProtocol/ExtFgProtocol.inf
+  INF devonPkg/Binaries/MotHwIdDxe/MotHwIdDxe.inf
+  INF devonPkg/Binaries/MotCoreServicesDxe/MotCoreServicesDxe.inf
+!endif
+
+!if $(ADD_DEVCHG) == 1
+  INF devonPkg/Binaries/ChargerExDxe/ChargerExDxe.inf
+  INF devonPkg/Binaries/QcomChargerDxeLA/QcomChargerDxeLA.inf
+!endif
