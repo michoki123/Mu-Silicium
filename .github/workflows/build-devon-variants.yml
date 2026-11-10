@@ -1,0 +1,35 @@
+name: Build UEFI devon (variantes)
+on:
+  workflow_dispatch:
+env:
+  CI_BUILD: true
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: pmic,       pmic: 1, clock: 0, hw: 0, tz: 0 }
+          - { name: clock,      pmic: 0, clock: 1, hw: 0, tz: 0 }
+          - { name: clock-orig, pmic: 0, clock: 2, hw: 0, tz: 0 }
+          - { name: pmic-clock, pmic: 1, clock: 1, hw: 0, tz: 0 }
+          - { name: tz,         pmic: 0, clock: 0, hw: 0, tz: 1 }
+          - { name: todo,       pmic: 1, clock: 1, hw: 1, tz: 1 }
+    steps:
+      - uses: actions/checkout@v7
+      - name: Configurar variante
+        run: |
+          f=Platforms/Motorola/devonPkg/devon.dsc
+          sed -i -E "s/(SWAP_PMIC[[:space:]]*=[[:space:]]*)0/\1${{ matrix.pmic }}/" $f
+          sed -i -E "s/(SWAP_CLOCK[[:space:]]*=[[:space:]]*)0/\1${{ matrix.clock }}/" $f
+          sed -i -E "s/(SWAP_HW[[:space:]]*=[[:space:]]*)0/\1${{ matrix.hw }}/" $f
+          sed -i -E "s/(SWAP_TZ[[:space:]]*=[[:space:]]*)0/\1${{ matrix.tz }}/" $f
+          grep -n "SWAP_" $f
+      - name: Build
+        run: bash ./setup_env.sh -p apt && python3 build_uefi.py -d devon -r DEBUG
+      - name: Subir imagen
+        uses: actions/upload-artifact@v7
+        with:
+          name: uefi-devon-${{ matrix.name }}
+          path: ./Mu-*
