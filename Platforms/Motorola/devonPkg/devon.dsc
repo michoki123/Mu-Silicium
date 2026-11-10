@@ -24,6 +24,10 @@
   SKUID_IDENTIFIER               = DEFAULT
   FLASH_DEFINITION               = devonPkg/devon.fdf
   USE_CUSTOM_DISPLAY_DRIVER      = 0
+  SWAP_PMIC                      = 0
+  SWAP_CLOCK                     = 0
+  SWAP_HW                        = 0
+  SWAP_TZ                        = 0
 
   #
   # 0 = SM6225
