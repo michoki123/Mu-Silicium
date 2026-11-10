@@ -63,8 +63,6 @@
   INF Binaries/spes/QcomPkg/Drivers/PlatformInfoDxe/PlatformInfoDxe.inf
   INF Binaries/spes/QcomPkg/Drivers/ButtonsDxe/ButtonsDxe.inf
   INF Binaries/spes/QcomPkg/Drivers/PmicDxe/PmicDxeLa.inf
-  INF Binaries/spes/QcomPkg/Drivers/ChargerExDxe/ChargerExDxe.inf
-  INF Binaries/spes/QcomPkg/Drivers/QcomChargerDxe/QcomChargerDxeLA.inf
   INF Binaries/spes/QcomPkg/Drivers/UsbPwrCtrlDxe/UsbPwrCtrlDxe.inf
   INF Binaries/spes/QcomPkg/Drivers/AdcDxe/AdcDxe.inf
   INF Binaries/spes/QcomPkg/Drivers/TsensDxe/TsensDxe.inf
