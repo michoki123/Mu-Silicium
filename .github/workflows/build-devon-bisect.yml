@@ -1,0 +1,36 @@
+name: Build UEFI devon (bisect)
+on:
+  workflow_dispatch:
+env:
+  CI_BUILD: true
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: nopmic,    pmic: 2, storage: 0, usb: 0, buttons: 0, wdog: 0 }
+          - { name: nostorage, pmic: 0, storage: 1, usb: 0, buttons: 0, wdog: 0 }
+          - { name: nousb,     pmic: 0, storage: 0, usb: 1, buttons: 0, wdog: 0 }
+          - { name: wdog,      pmic: 0, storage: 0, usb: 0, buttons: 0, wdog: 1 }
+          - { name: min,       pmic: 2, storage: 1, usb: 1, buttons: 1, wdog: 0 }
+    steps:
+      - uses: actions/checkout@v7
+      - name: Configurar variante
+        run: |
+          f=Platforms/Motorola/devonPkg/devon.dsc
+          set_flag() { sed -i -E "s/(^[[:space:]]*$1[[:space:]]*=[[:space:]]*)[0-9]+/\1$2/" $f; }
+          set_flag SWAP_PMIC ${{ matrix.pmic }}
+          set_flag DROP_STORAGE ${{ matrix.storage }}
+          set_flag DROP_USB ${{ matrix.usb }}
+          set_flag DROP_BUTTONS ${{ matrix.buttons }}
+          set_flag ADD_WDOG ${{ matrix.wdog }}
+          grep -n -E "SWAP_|DROP_|ADD_" $f
+      - name: Build
+        run: bash ./setup_env.sh -p apt && python3 build_uefi.py -d devon -r DEBUG
+      - name: Subir imagen
+        uses: actions/upload-artifact@v7
+        with:
+          name: uefi-devon-${{ matrix.name }}
+          path: ./Mu-*
