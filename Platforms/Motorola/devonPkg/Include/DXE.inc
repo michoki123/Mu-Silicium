@@ -118,8 +118,12 @@
 !else
   INF Binaries/spes/QcomPkg/Drivers/SPMIDxe/SPMIDxe.inf
 !endif
+!if $(DROP_STORAGE) == 0
   INF Binaries/spes/QcomPkg/Drivers/SdccDxe/SdccDxe.inf
+!endif
+!if $(DROP_STORAGE) == 0
   INF Binaries/spes/QcomPkg/Drivers/UFSDxe/UFSDxe.inf
+!endif
 !if $(SWAP_HW) == 1
   INF devonPkg/Binaries/DALTLMM/DALTLMM.inf
 !else
@@ -137,13 +141,18 @@
 !else
   INF Binaries/spes/QcomPkg/Drivers/PlatformInfoDxe/PlatformInfoDxe.inf
 !endif
+!if $(DROP_BUTTONS) == 0
   INF Binaries/spes/QcomPkg/Drivers/ButtonsDxe/ButtonsDxe.inf
+!endif
 !if $(SWAP_PMIC) == 1
   INF devonPkg/Binaries/PmicDxe/PmicDxe.inf
-!else
+!endif
+!if $(SWAP_PMIC) == 0
   INF Binaries/spes/QcomPkg/Drivers/PmicDxe/PmicDxeLa.inf
 !endif
+!if $(DROP_USB) == 0
   INF Binaries/spes/QcomPkg/Drivers/UsbPwrCtrlDxe/UsbPwrCtrlDxe.inf
+!endif
 !if $(SWAP_HW) == 1
   INF devonPkg/Binaries/AdcDxe/AdcDxe.inf
 !else
@@ -159,15 +168,29 @@
 !else
   INF Binaries/spes/QcomPkg/Drivers/DDRInfoDxe/DDRInfoDxe.inf
 !endif
+!if $(DROP_USB) == 0
   INF Binaries/spes/QcomPkg/Drivers/UsbfnDwc3Dxe/UsbfnDwc3Dxe.inf
+!endif
 
+!if $(DROP_USB) == 0
   INF MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf
+!endif
+!if $(DROP_USB) == 0
   INF MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
+!endif
+!if $(DROP_USB) == 0
   INF MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe.inf
+!endif
 
+!if $(DROP_USB) == 0
   INF Binaries/spes/QcomPkg/Drivers/UsbMsdDxe/UsbMsdDxe.inf
+!endif
+!if $(DROP_USB) == 0
   INF Binaries/spes/QcomPkg/Drivers/UsbDeviceDxe/UsbDeviceDxe.inf
+!endif
+!if $(DROP_USB) == 0
   INF Binaries/spes/QcomPkg/Drivers/UsbConfigDxe/UsbConfigDxe.inf
+!endif
   INF Binaries/spes/QcomPkg/Drivers/HashDxe/HashDxe.inf
   INF Binaries/spes/QcomPkg/Drivers/CipherDxe/CipherDxe.inf
   INF Binaries/spes/QcomPkg/Drivers/MacDxe/MacDxe.inf
@@ -180,4 +203,8 @@
   INF devonPkg/Binaries/ShmBridgeDxe/ShmBridgeDxe.inf
 !else
   INF Binaries/spes/QcomPkg/Drivers/ShmBridgeDxe/ShmBridgeDxeLA.inf
+!endif
+
+!if $(ADD_WDOG) == 1
+  INF devonPkg/Binaries/QcomWDogDxe/QcomWDogDxe.inf
 !endif

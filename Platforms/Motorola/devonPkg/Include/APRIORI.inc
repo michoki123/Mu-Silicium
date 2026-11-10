@@ -92,8 +92,12 @@ APRIORI DXE {
 
   INF MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
 
+!if $(DROP_STORAGE) == 0
   INF Binaries/spes/QcomPkg/Drivers/SdccDxe/SdccDxe.inf
+!endif
+!if $(DROP_STORAGE) == 0
   INF Binaries/spes/QcomPkg/Drivers/UFSDxe/UFSDxe.inf
+!endif
 
   INF FatPkg/EnhancedFatDxe/Fat.inf
 
@@ -120,7 +124,8 @@ APRIORI DXE {
 
 !if $(SWAP_PMIC) == 1
   INF devonPkg/Binaries/PmicDxe/PmicDxe.inf
-!else
+!endif
+!if $(SWAP_PMIC) == 0
   INF Binaries/spes/QcomPkg/Drivers/PmicDxe/PmicDxeLa.inf
 !endif
   INF Binaries/spes/QcomPkg/Drivers/PILDxe/PILDxe.inf
@@ -145,17 +150,35 @@ APRIORI DXE {
 !else
   INF Binaries/spes/QcomPkg/Drivers/AdcDxe/AdcDxe.inf
 !endif
+!if $(DROP_USB) == 0
   INF Binaries/spes/QcomPkg/Drivers/UsbPwrCtrlDxe/UsbPwrCtrlDxe.inf
+!endif
+!if $(DROP_USB) == 0
   INF Binaries/spes/QcomPkg/Drivers/UsbfnDwc3Dxe/UsbfnDwc3Dxe.inf
+!endif
 
+!if $(DROP_USB) == 0
   INF MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf
+!endif
+!if $(DROP_USB) == 0
   INF MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
+!endif
+!if $(DROP_USB) == 0
   INF MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe.inf
+!endif
 
+!if $(DROP_USB) == 0
   INF Binaries/spes/QcomPkg/Drivers/UsbMsdDxe/UsbMsdDxe.inf
+!endif
+!if $(DROP_USB) == 0
   INF Binaries/spes/QcomPkg/Drivers/UsbDeviceDxe/UsbDeviceDxe.inf
+!endif
+!if $(DROP_USB) == 0
   INF Binaries/spes/QcomPkg/Drivers/UsbConfigDxe/UsbConfigDxe.inf
+!endif
+!if $(DROP_BUTTONS) == 0
   INF Binaries/spes/QcomPkg/Drivers/ButtonsDxe/ButtonsDxe.inf
+!endif
 !if $(SWAP_HW) == 1
   INF devonPkg/Binaries/TsensDxe/TsensDxe.inf
 !else

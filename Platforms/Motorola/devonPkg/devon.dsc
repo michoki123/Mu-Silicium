@@ -28,6 +28,10 @@
   SWAP_CLOCK                     = 0
   SWAP_HW                        = 0
   SWAP_TZ                        = 0
+  DROP_STORAGE                   = 0
+  DROP_USB                       = 0
+  DROP_BUTTONS                   = 0
+  ADD_WDOG                       = 0
 
   #
   # 0 = SM6225
