@@ -10,16 +10,17 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { name: i2c-ro,  mode: 1 }
-          - { name: i2c-otg, mode: 2 }
+          - { name: xhci,      mode: 0, xhci: 1 }
+          - { name: xhci-otg,  mode: 2, xhci: 1 }
     steps:
       - uses: actions/checkout@v7
-      - name: Configurar variante (sin PmicDxe + sonda I2C)
+      - name: Configurar variante (sin PmicDxe + xHCI)
         run: |
           f=Platforms/Motorola/devonPkg/devon.dsc
           set_flag() { sed -i -E "s/(^[[:space:]]*$1[[:space:]]*=[[:space:]]*)[0-9]+/\1$2/" $f; }
           set_flag SWAP_PMIC 2
           set_flag I2C_MODE ${{ matrix.mode }}
+          set_flag ADD_XHCI ${{ matrix.xhci }}
           grep -n -E "SWAP_|DROP_|ADD_|I2C_MODE" $f
       - name: Build
         run: bash ./setup_env.sh -p apt && python3 build_uefi.py -d devon -r DEBUG
