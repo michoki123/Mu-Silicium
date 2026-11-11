@@ -220,3 +220,7 @@
   INF devonPkg/Binaries/ChargerExDxe/ChargerExDxe.inf
   INF devonPkg/Binaries/QcomChargerDxeLA/QcomChargerDxeLA.inf
 !endif
+
+!if $(ADD_I2CPROBE) == 1
+  INF devonPkg/Drivers/I2cProbeDxe/I2cProbeDxe.inf
+!endif

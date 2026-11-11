@@ -34,6 +34,7 @@
   ADD_WDOG                       = 0
   ADD_MOT                        = 0
   ADD_DEVCHG                     = 0
+  ADD_I2CPROBE                   = 0
 
   #
   # 0 = SM6225
@@ -92,3 +93,7 @@
   # ACPI Tables
   #
   spes/AcpiTables.inf
+
+!if $(ADD_I2CPROBE) == 1
+  devonPkg/Drivers/I2cProbeDxe/I2cProbeDxe.inf
+!endif
