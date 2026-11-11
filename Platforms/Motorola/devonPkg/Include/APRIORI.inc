@@ -156,6 +156,10 @@ APRIORI DXE {
 !if $(DROP_USB) == 0
   INF Binaries/spes/QcomPkg/Drivers/UsbfnDwc3Dxe/UsbfnDwc3Dxe.inf
 !endif
+!if $(ADD_XHCI) == 1
+  INF Binaries/generic/QcomPkg/Drivers/XhciPciEmulationDxe/XhciPciEmulationDxe.inf
+  INF Binaries/generic/QcomPkg/Drivers/XhciDxe/XhciDxe.inf
+!endif
 
 !if $(DROP_USB) == 0
   INF MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf

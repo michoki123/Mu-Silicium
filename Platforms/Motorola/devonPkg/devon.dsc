@@ -35,6 +35,7 @@
   ADD_MOT                        = 0
   ADD_DEVCHG                     = 0
   I2C_MODE                       = 0
+  ADD_XHCI                       = 0
 
   #
   # 0 = SM6225
