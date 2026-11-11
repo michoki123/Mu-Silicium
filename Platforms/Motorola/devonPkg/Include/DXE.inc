@@ -221,6 +221,9 @@
   INF devonPkg/Binaries/QcomChargerDxeLA/QcomChargerDxeLA.inf
 !endif
 
-!if $(ADD_I2CPROBE) == 1
+!if $(I2C_MODE) == 1
+  INF devonPkg/Drivers/I2cProbeDxe/I2cProbeDxe.inf
+!endif
+!if $(I2C_MODE) == 2
   INF devonPkg/Drivers/I2cProbeDxe/I2cProbeDxe.inf
 !endif
