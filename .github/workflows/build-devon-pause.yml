@@ -1,0 +1,32 @@
+name: Build UEFI devon (pause)
+on:
+  workflow_dispatch:
+env:
+  CI_BUILD: true
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: pause-spes,      pmic: 0, mot: 0 }
+          - { name: pause-devon,     pmic: 1, mot: 0 }
+          - { name: pause-devon-mot, pmic: 1, mot: 1 }
+    steps:
+      - uses: actions/checkout@v7
+      - name: Configurar variante (PmicDxe + pausa en errores)
+        run: |
+          f=Platforms/Motorola/devonPkg/devon.dsc
+          set_flag() { sed -i -E "s/(^[[:space:]]*$1[[:space:]]*=[[:space:]]*)[0-9]+/\1$2/" $f; }
+          set_flag SWAP_PMIC ${{ matrix.pmic }}
+          set_flag ADD_MOT ${{ matrix.mot }}
+          set_flag PAUSE_LOG 1
+          grep -n -E "SWAP_|DROP_|ADD_|I2C_MODE|PAUSE_LOG" $f
+      - name: Build
+        run: bash ./setup_env.sh -p apt && python3 build_uefi.py -d devon -r DEBUG
+      - name: Subir imagen
+        uses: actions/upload-artifact@v7
+        with:
+          name: uefi-devon-${{ matrix.name }}
+          path: ./Mu-*
