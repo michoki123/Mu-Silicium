@@ -36,6 +36,7 @@
   ADD_DEVCHG                     = 0
   I2C_MODE                       = 0
   ADD_XHCI                       = 0
+  PAUSE_LOG                      = 0
 
   #
   # 0 = SM6225
@@ -103,4 +104,9 @@
     <BuildOptions>
       *_*_*_CC_FLAGS = -DENABLE_OTG=1
   }
+!endif
+
+!if $(PAUSE_LOG) == 1
+[BuildOptions]
+  *_*_*_CC_FLAGS = -DPAUSE_ON_ERROR
 !endif

@@ -238,6 +238,48 @@ GetFrameBufferMemory (
   return EFI_SUCCESS;
 }
 
+#ifdef PAUSE_ON_ERROR
+//
+// Diagnostico (compilar con -DPAUSE_ON_ERROR): detiene la ejecucion unos segundos despues de
+// imprimir una linea que contenga una palabra clave de error, para poder leerla o fotografiarla.
+//
+#ifndef PAUSE_ON_ERROR_US
+#define PAUSE_ON_ERROR_US  2000000
+#endif
+
+STATIC
+BOOLEAN
+HasErrorKeyword (
+  IN CONST UINT8  *Text,
+  IN UINTN        Length
+  )
+{
+  STATIC CONST CHAR8  *Keys[] = {
+    "rror", "ERROR", "Fail", "fail", "ASSERT", "Not Found", "hutdown", "Reset", "reset", "WDOG", "atchdog", "ower off"
+  };
+
+  for (UINTN k = 0; k < sizeof (Keys) / sizeof (Keys[0]); k++) {
+    UINTN  KeyLen = 0;
+    while (Keys[k][KeyLen] != 0) {
+      KeyLen++;
+    }
+
+    for (UINTN i = 0; i + KeyLen <= Length; i++) {
+      UINTN  j = 0;
+      while ((j < KeyLen) && (Text[i + j] == (UINT8)Keys[k][j])) {
+        j++;
+      }
+
+      if (j == KeyLen) {
+        return TRUE;
+      }
+    }
+  }
+
+  return FALSE;
+}
+#endif
+
 UINTN
 EFIAPI
 SerialPortWrite (
@@ -247,6 +289,7 @@ SerialPortWrite (
   EFI_STATUS           Status;
   EFI_PHYSICAL_ADDRESS FbBase;
   UINT64               FbLength;
+  UINT8                *OrigBuffer = Buffer;
 
   // Get Frame Buffer Memory
   Status = GetFrameBufferMemory (&FbBase, &FbLength);
@@ -274,6 +317,12 @@ SerialPortWrite (
 
   // Flush Frame Buffer
   WriteBackInvalidateDataCacheRange ((VOID *)FbBase, FbLength);
+
+#ifdef PAUSE_ON_ERROR
+  if (HasErrorKeyword (OrigBuffer, NumberOfBytes)) {
+    MicroSecondDelay (PAUSE_ON_ERROR_US);
+  }
+#endif
 
   return NumberOfBytes;
 }
