@@ -37,6 +37,7 @@
   I2C_MODE                       = 0
   ADD_XHCI                       = 0
   PAUSE_LOG                      = 0
+  MOT_EARLY                      = 0
 
   #
   # 0 = SM6225

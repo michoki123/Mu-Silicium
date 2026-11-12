@@ -231,3 +231,10 @@
 !if $(I2C_MODE) == 2
   INF devonPkg/Drivers/I2cProbeDxe/I2cProbeDxe.inf
 !endif
+
+!if $(MOT_EARLY) == 1
+  INF devonPkg/Binaries/MotBootFlagsDxe/MotBootFlagsDxe.inf
+!endif
+!if $(MOT_EARLY) == 2
+  INF devonPkg/Binaries/MotBootFlagsDxe/MotBootFlagsDxe.inf
+!endif

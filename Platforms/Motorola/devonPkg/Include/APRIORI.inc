@@ -122,6 +122,17 @@ APRIORI DXE {
 
   INF MdeModulePkg/Universal/ResetSystemRuntimeDxe/ResetSystemRuntimeDxe.inf
 
+!if $(MOT_EARLY) == 1
+  INF devonPkg/Binaries/MotBootFlagsDxe/MotBootFlagsDxe.inf
+!endif
+!if $(MOT_EARLY) == 2
+  INF devonPkg/Binaries/MotBootFlagsDxe/MotBootFlagsDxe.inf
+  INF devonPkg/Binaries/MotHwIdDxe/MotHwIdDxe.inf
+  INF Binaries/spes/QcomPkg/Drivers/I2CDxe/I2CDxe.inf
+  INF devonPkg/Binaries/ExtChargerProtocol/ExtChargerProtocol.inf
+  INF devonPkg/Binaries/ExtFgProtocol/ExtFgProtocol.inf
+!endif
+
 !if $(SWAP_PMIC) == 1
   INF devonPkg/Binaries/PmicDxe/PmicDxe.inf
 !endif
@@ -140,9 +151,10 @@ APRIORI DXE {
   INF MdeModulePkg/Universal/HiiDatabaseDxe/HiiDatabaseDxe.inf
   INF MdeModulePkg/Universal/BdsDxe/BdsDxe.inf
 
-!if $(SWAP_HW) == 1
-  INF devonPkg/Binaries/I2C/I2C.inf
-!else
+!if $(MOT_EARLY) == 0
+  INF Binaries/spes/QcomPkg/Drivers/I2CDxe/I2CDxe.inf
+!endif
+!if $(MOT_EARLY) == 1
   INF Binaries/spes/QcomPkg/Drivers/I2CDxe/I2CDxe.inf
 !endif
 !if $(SWAP_HW) == 1
