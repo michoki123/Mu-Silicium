@@ -1,5 +1,6 @@
 /**
-  I2cProbeDxe v2 - sonda I2C del Moto G32 (devon). Solo lectura salvo que se compile con -DENABLE_OTG=1.
+  I2cProbeDxe v3 - sonda I2C del Moto G32 (devon). Solo lectura salvo que se compile con -DENABLE_OTG=1;
+  en ese modo enciende el OTG del SGM41513 y lo REAFIRMA cada segundo (el driver de cargador de Motorola lo reinicia).
 
   Usa el protocolo I2C de Qualcomm (mismo diseno que QcomPkg/Include/Protocol/EFII2C.h).
   Para cada instancia de bus 0..15 intenta leer los registros 0x00.. de tres chips conocidos:
@@ -140,7 +141,19 @@ OtgAssert (
 {
   UINT8   R1;
   UINT8   New;
+  UINT8   R8;
   UINT32  St;
+
+  // No activar el boost si hay VBUS externo (PC o cargador): VBUS_STAT = REG08[7:5].
+  // 0 = sin entrada, 7 = OTG ya activo (mapa tipo BQ25601).
+  St = RdN (ADDR_CHARGER, 8, &R8, 1);
+  if ((St == 0) && (((R8 >> 5) & 7) != 0) && (((R8 >> 5) & 7) != 7)) {
+    if (Verbose) {
+      DEBUG ((EFI_D_ERROR, "OTG: hay VBUS externo (VBUS_STAT=%u): NO activo el boost\n", (R8 >> 5) & 7));
+    }
+
+    return;
+  }
 
   St = RdN (ADDR_CHARGER, 1, &R1, 1);
   if (St != 0) {
@@ -153,6 +166,19 @@ OtgAssert (
   if (Verbose) {
     DEBUG ((EFI_D_ERROR, "OTG: REG01 %02x -> %02x (write err=%u)\n", R1, New, St));
   }
+}
+
+STATIC EFI_EVENT  mOtgTimer = NULL;
+
+STATIC
+VOID
+EFIAPI
+OtgTick (
+  IN EFI_EVENT  Event,
+  IN VOID       *Context
+  )
+{
+  OtgAssert (FALSE);
 }
 #endif
 
@@ -269,13 +295,17 @@ ProbeAll (
 #ifdef ENABLE_OTG
   OtgAssert (TRUE);
   mOtgOn = TRUE;
+  if (!EFI_ERROR (gBS->CreateEvent (EVT_TIMER | EVT_NOTIFY_SIGNAL, TPL_CALLBACK, OtgTick, NULL, &mOtgTimer))) {
+    gBS->SetTimer (mOtgTimer, TimerPeriodic, 10 * 1000 * 1000);   // cada 1 s
+  }
+
   gBS->Stall (300 * 1000);
   DumpChg ("OTG");
   DumpTypeC ("OTG");
 #endif
 
-  DEBUG ((EFI_D_ERROR, "I2cProbe: fin. Pausa de 30 s para leer la pantalla...\n"));
-  WaitSeconds (30);
+  DEBUG ((EFI_D_ERROR, "I2cProbe: fin. Pausa de 10 s para leer la pantalla...\n"));
+  WaitSeconds (10);
   // mH queda abierto a proposito.
 }
 
