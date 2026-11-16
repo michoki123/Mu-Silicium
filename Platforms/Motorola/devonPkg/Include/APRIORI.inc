@@ -173,11 +173,17 @@ APRIORI DXE {
 !if $(SWAP_ADC) == 1
   INF devonPkg/Binaries/AdcDxe/AdcDxe.inf
 !endif
-!if $(DROP_USB) == 0
+!if $(SWAP_USB) == 0
   INF Binaries/spes/QcomPkg/Drivers/UsbPwrCtrlDxe/UsbPwrCtrlDxe.inf
 !endif
-!if $(DROP_USB) == 0
+!if $(SWAP_USB) == 1
+  INF devonPkg/Binaries/UsbPwrCtrlDxe/UsbPwrCtrlDxe.inf
+!endif
+!if $(SWAP_USB) == 0
   INF Binaries/spes/QcomPkg/Drivers/UsbfnDwc3Dxe/UsbfnDwc3Dxe.inf
+!endif
+!if $(SWAP_USB) == 1
+  INF devonPkg/Binaries/UsbfnDwc3Dxe/UsbfnDwc3Dxe.inf
 !endif
 !if $(ADD_XHCI) == 1
   INF Binaries/generic/QcomPkg/Drivers/XhciPciEmulationDxe/XhciPciEmulationDxe.inf
@@ -200,8 +206,11 @@ APRIORI DXE {
 !if $(DROP_USB) == 0
   INF Binaries/spes/QcomPkg/Drivers/UsbDeviceDxe/UsbDeviceDxe.inf
 !endif
-!if $(DROP_USB) == 0
+!if $(SWAP_USB) == 0
   INF Binaries/spes/QcomPkg/Drivers/UsbConfigDxe/UsbConfigDxe.inf
+!endif
+!if $(SWAP_USB) == 1
+  INF devonPkg/Binaries/UsbConfigDxe/UsbConfigDxe.inf
 !endif
 !if $(DROP_BUTTONS) == 0
   INF Binaries/spes/QcomPkg/Drivers/ButtonsDxe/ButtonsDxe.inf
