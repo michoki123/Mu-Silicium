@@ -1,0 +1,26 @@
+name: Build UEFI devon (bf3)
+on:
+  workflow_dispatch:
+env:
+  CI_BUILD: true
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - name: Configurar variante (cadena Motorola completa antes del PmicDxe + pausa en errores)
+        run: |
+          f=Platforms/Motorola/devonPkg/devon.dsc
+          set_flag() { sed -i -E "s/(^[[:space:]]*$1[[:space:]]*=[[:space:]]*)[0-9]+/\1$2/" $f; }
+          set_flag SWAP_PMIC 1
+          set_flag MOT_EARLY 3
+          set_flag ADD_MOT 1
+          set_flag PAUSE_LOG 1
+          grep -n -E "SWAP_|DROP_|ADD_|I2C_MODE|PAUSE_LOG|MOT_EARLY" $f
+      - name: Build
+        run: bash ./setup_env.sh -p apt && python3 build_uefi.py -d devon -r DEBUG
+      - name: Subir imagen
+        uses: actions/upload-artifact@v7
+        with:
+          name: uefi-devon-bf3
+          path: ./Mu-*
