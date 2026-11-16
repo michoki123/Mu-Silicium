@@ -240,12 +240,52 @@ GetFrameBufferMemory (
 
 #ifdef PAUSE_ON_ERROR
 //
-// Diagnostico (compilar con -DPAUSE_ON_ERROR): detiene la ejecucion unos segundos despues de
-// imprimir una linea que contenga una palabra clave de error, para poder leerla o fotografiarla.
+// Diagnostico (compilar con -DPAUSE_ON_ERROR):
+//  - detiene la ejecucion unos segundos despues de imprimir una linea con una palabra clave de error;
+//  - despues de imprimir una linea que contenga SLOW_AFTER_TEXT, pasa a "modo lento": espera
+//    SLOW_STEP_US despues de CADA linea, para poder leer que driver se carga justo antes de un apagado.
 //
 #ifndef PAUSE_ON_ERROR_US
 #define PAUSE_ON_ERROR_US  2000000
 #endif
+
+#ifndef SLOW_STEP_US
+#define SLOW_STEP_US       1000000
+#endif
+
+#ifndef SLOW_AFTER_TEXT
+#define SLOW_AFTER_TEXT    "WatchdogTimer"
+#endif
+
+STATIC BOOLEAN  mSlowMode = FALSE;
+
+STATIC
+BOOLEAN
+HasKey (
+  IN CONST UINT8  *Text,
+  IN UINTN        Length,
+  IN CONST CHAR8  *Key
+  )
+{
+  UINTN  KeyLen = 0;
+
+  while (Key[KeyLen] != 0) {
+    KeyLen++;
+  }
+
+  for (UINTN i = 0; i + KeyLen <= Length; i++) {
+    UINTN  j = 0;
+    while ((j < KeyLen) && (Text[i + j] == (UINT8)Key[j])) {
+      j++;
+    }
+
+    if (j == KeyLen) {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
 
 STATIC
 BOOLEAN
@@ -259,20 +299,8 @@ HasErrorKeyword (
   };
 
   for (UINTN k = 0; k < sizeof (Keys) / sizeof (Keys[0]); k++) {
-    UINTN  KeyLen = 0;
-    while (Keys[k][KeyLen] != 0) {
-      KeyLen++;
-    }
-
-    for (UINTN i = 0; i + KeyLen <= Length; i++) {
-      UINTN  j = 0;
-      while ((j < KeyLen) && (Text[i + j] == (UINT8)Keys[k][j])) {
-        j++;
-      }
-
-      if (j == KeyLen) {
-        return TRUE;
-      }
+    if (HasKey (Text, Length, Keys[k])) {
+      return TRUE;
     }
   }
 
@@ -319,7 +347,13 @@ SerialPortWrite (
   WriteBackInvalidateDataCacheRange ((VOID *)FbBase, FbLength);
 
 #ifdef PAUSE_ON_ERROR
-  if (HasErrorKeyword (OrigBuffer, NumberOfBytes)) {
+  if (!mSlowMode && HasKey (OrigBuffer, NumberOfBytes, SLOW_AFTER_TEXT)) {
+    mSlowMode = TRUE;
+  }
+
+  if (mSlowMode) {
+    MicroSecondDelay (SLOW_STEP_US);
+  } else if (HasErrorKeyword (OrigBuffer, NumberOfBytes)) {
     MicroSecondDelay (PAUSE_ON_ERROR_US);
   }
 #endif
