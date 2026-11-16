@@ -125,6 +125,16 @@ APRIORI DXE {
 !if $(MOT_EARLY) == 1
   INF devonPkg/Binaries/MotBootFlagsDxe/MotBootFlagsDxe.inf
 !endif
+!if $(MOT_EARLY) == 3
+  INF devonPkg/Binaries/MotBootFlagsDxe/MotBootFlagsDxe.inf
+  INF devonPkg/Binaries/MotStorageDxe/MotStorageDxe.inf
+  INF devonPkg/Binaries/MotUtagsDxe/MotUtagsDxe.inf
+  INF devonPkg/Binaries/MotUtagsDictDxe/MotUtagsDictDxe.inf
+  INF devonPkg/Binaries/MotHwIdDxe/MotHwIdDxe.inf
+  INF Binaries/spes/QcomPkg/Drivers/I2CDxe/I2CDxe.inf
+  INF devonPkg/Binaries/ExtChargerProtocol/ExtChargerProtocol.inf
+  INF devonPkg/Binaries/ExtFgProtocol/ExtFgProtocol.inf
+!endif
 !if $(MOT_EARLY) == 2
   INF devonPkg/Binaries/MotBootFlagsDxe/MotBootFlagsDxe.inf
   INF devonPkg/Binaries/MotHwIdDxe/MotHwIdDxe.inf

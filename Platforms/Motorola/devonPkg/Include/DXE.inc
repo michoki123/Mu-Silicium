@@ -238,3 +238,10 @@
 !if $(MOT_EARLY) == 2
   INF devonPkg/Binaries/MotBootFlagsDxe/MotBootFlagsDxe.inf
 !endif
+
+!if $(MOT_EARLY) == 3
+  INF devonPkg/Binaries/MotBootFlagsDxe/MotBootFlagsDxe.inf
+  INF devonPkg/Binaries/MotStorageDxe/MotStorageDxe.inf
+  INF devonPkg/Binaries/MotUtagsDxe/MotUtagsDxe.inf
+  INF devonPkg/Binaries/MotUtagsDictDxe/MotUtagsDictDxe.inf
+!endif
