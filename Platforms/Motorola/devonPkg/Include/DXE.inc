@@ -153,10 +153,11 @@
 !if $(DROP_USB) == 0
   INF Binaries/spes/QcomPkg/Drivers/UsbPwrCtrlDxe/UsbPwrCtrlDxe.inf
 !endif
-!if $(SWAP_HW) == 1
-  INF devonPkg/Binaries/AdcDxe/AdcDxe.inf
-!else
+!if $(SWAP_ADC) == 0
   INF Binaries/spes/QcomPkg/Drivers/AdcDxe/AdcDxe.inf
+!endif
+!if $(SWAP_ADC) == 1
+  INF devonPkg/Binaries/AdcDxe/AdcDxe.inf
 !endif
 !if $(SWAP_HW) == 1
   INF devonPkg/Binaries/TsensDxe/TsensDxe.inf
