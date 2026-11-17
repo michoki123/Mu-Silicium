@@ -304,6 +304,17 @@ HasErrorKeyword (
     }
   }
 
+#ifdef PAUSE_USB
+  {
+    STATIC CONST CHAR8  *UsbKeys[] = { "Usb", "USB", "Xhc", "Vbus", "VBUS", "OTG", "Otg", "Type-C", "TYPEC", "Typec" };
+    for (UINTN k = 0; k < sizeof (UsbKeys) / sizeof (UsbKeys[0]); k++) {
+      if (HasKey (Text, Length, UsbKeys[k])) {
+        return TRUE;
+      }
+    }
+  }
+#endif
+
   return FALSE;
 }
 #endif

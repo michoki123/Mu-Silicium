@@ -117,3 +117,7 @@
 [BuildOptions]
   *_*_*_CC_FLAGS = -DPAUSE_ON_ERROR -DSLOW_STEP_US=0
 !endif
+!if $(PAUSE_LOG) == 3
+[BuildOptions]
+  *_*_*_CC_FLAGS = -DPAUSE_ON_ERROR -DSLOW_STEP_US=0 -DPAUSE_USB
+!endif

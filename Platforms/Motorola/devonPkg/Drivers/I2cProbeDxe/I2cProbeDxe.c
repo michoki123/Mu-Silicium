@@ -168,19 +168,46 @@ OtgAssert (
   }
 }
 
-STATIC EFI_EVENT  mOtgTimer = NULL;
+#endif
+
+STATIC EFI_EVENT  mTick = NULL;
+STATIC UINT8      mLast[4] = { 0xEE, 0xEE, 0xEE, 0xEE };
 
 STATIC
 VOID
 EFIAPI
-OtgTick (
+TickCb (
   IN EFI_EVENT  Event,
   IN VOID       *Context
   )
 {
+  UINT8   R8;
+  UINT8   R9;
+  UINT8   RA;
+  UINT8   V8;
+  UINT32  E;
+
+#ifdef ENABLE_OTG
   OtgAssert (FALSE);
-}
 #endif
+
+  R8 = R9 = RA = V8 = 0;
+  E  = RdN (ADDR_TYPEC, 8, &R8, 1);
+  E |= RdN (ADDR_TYPEC, 9, &R9, 1);
+  E |= RdN (ADDR_TYPEC, 10, &RA, 1);
+  E |= RdN (ADDR_CHARGER, 8, &V8, 1);
+  if ((E == 0) && ((R8 != mLast[0]) || (R9 != mLast[1]) || (RA != mLast[2]) || (V8 != mLast[3]))) {
+    mLast[0] = R8;
+    mLast[1] = R9;
+    mLast[2] = RA;
+    mLast[3] = V8;
+    DEBUG ((
+      EFI_D_ERROR,
+      "TYPEC reg08=%02x reg09=%02x reg0A=%02x | USB-C estado=%u modo=%u | CARGADOR VBUS_STAT=%u\n",
+      R8, R9, RA, (R9 >> 6) & 3, (RA >> 4) & 3, (V8 >> 5) & 7
+      ));
+  }
+}
 
 STATIC
 VOID
@@ -295,10 +322,6 @@ ProbeAll (
 #ifdef ENABLE_OTG
   OtgAssert (TRUE);
   mOtgOn = TRUE;
-  if (!EFI_ERROR (gBS->CreateEvent (EVT_TIMER | EVT_NOTIFY_SIGNAL, TPL_CALLBACK, OtgTick, NULL, &mOtgTimer))) {
-    gBS->SetTimer (mOtgTimer, TimerPeriodic, 10 * 1000 * 1000);   // cada 1 s
-  }
-
   gBS->Stall (300 * 1000);
   DumpChg ("OTG");
   DumpTypeC ("OTG");
@@ -306,6 +329,9 @@ ProbeAll (
 
   DEBUG ((EFI_D_ERROR, "I2cProbe: fin. Pausa de 10 s para leer la pantalla...\n"));
   WaitSeconds (10);
+  if (!EFI_ERROR (gBS->CreateEvent (EVT_TIMER | EVT_NOTIFY_SIGNAL, TPL_CALLBACK, TickCb, NULL, &mTick))) {
+    gBS->SetTimer (mTick, TimerPeriodic, 10 * 1000 * 1000);   // cada 1 s
+  }
   // mH queda abierto a proposito.
 }
 
