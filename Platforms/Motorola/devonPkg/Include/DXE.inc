@@ -150,10 +150,10 @@
 !if $(SWAP_PMIC) == 0
   INF Binaries/spes/QcomPkg/Drivers/PmicDxe/PmicDxeLa.inf
 !endif
-!if $(SWAP_USB) == 0
+!if $(SWAP_USBPWR) == 0
   INF Binaries/spes/QcomPkg/Drivers/UsbPwrCtrlDxe/UsbPwrCtrlDxe.inf
 !endif
-!if $(SWAP_USB) == 1
+!if $(SWAP_USBPWR) == 1
   INF devonPkg/Binaries/UsbPwrCtrlDxe/UsbPwrCtrlDxe.inf
 !endif
 !if $(SWAP_ADC) == 0
@@ -172,10 +172,10 @@
 !else
   INF Binaries/spes/QcomPkg/Drivers/DDRInfoDxe/DDRInfoDxe.inf
 !endif
-!if $(SWAP_USB) == 0
+!if $(SWAP_USBFN) == 0
   INF Binaries/spes/QcomPkg/Drivers/UsbfnDwc3Dxe/UsbfnDwc3Dxe.inf
 !endif
-!if $(SWAP_USB) == 1
+!if $(SWAP_USBFN) == 1
   INF devonPkg/Binaries/UsbfnDwc3Dxe/UsbfnDwc3Dxe.inf
 !endif
 !if $(ADD_XHCI) == 1
@@ -199,10 +199,10 @@
 !if $(DROP_USB) == 0
   INF Binaries/spes/QcomPkg/Drivers/UsbDeviceDxe/UsbDeviceDxe.inf
 !endif
-!if $(SWAP_USB) == 0
+!if $(SWAP_USBCFG) == 0
   INF Binaries/spes/QcomPkg/Drivers/UsbConfigDxe/UsbConfigDxe.inf
 !endif
-!if $(SWAP_USB) == 1
+!if $(SWAP_USBCFG) == 1
   INF devonPkg/Binaries/UsbConfigDxe/UsbConfigDxe.inf
 !endif
   INF Binaries/spes/QcomPkg/Drivers/HashDxe/HashDxe.inf

@@ -295,7 +295,8 @@ HasErrorKeyword (
   )
 {
   STATIC CONST CHAR8  *Keys[] = {
-    "rror", "ERROR", "Fail", "fail", "ASSERT", "Not Found", "hutdown", "Reset", "reset", "WDOG", "atchdog", "ower off"
+    "rror", "ERROR", "Fail", "fail", "ASSERT", "Not Found", "hutdown", "Reset", "reset", "WDOG", "atchdog", "ower off",
+    "Unable", "unable", "Vbus", "VBUS", "Host", "OTG", "Otg", "Data Role", "Type-C"
   };
 
   for (UINTN k = 0; k < sizeof (Keys) / sizeof (Keys[0]); k++) {
@@ -303,17 +304,6 @@ HasErrorKeyword (
       return TRUE;
     }
   }
-
-#ifdef PAUSE_USB
-  {
-    STATIC CONST CHAR8  *UsbKeys[] = { "Usb", "USB", "Xhc", "Vbus", "VBUS", "OTG", "Otg", "Type-C", "TYPEC", "Typec" };
-    for (UINTN k = 0; k < sizeof (UsbKeys) / sizeof (UsbKeys[0]); k++) {
-      if (HasKey (Text, Length, UsbKeys[k])) {
-        return TRUE;
-      }
-    }
-  }
-#endif
 
   return FALSE;
 }

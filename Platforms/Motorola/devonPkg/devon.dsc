@@ -39,7 +39,9 @@
   PAUSE_LOG                      = 0
   MOT_EARLY                      = 0
   SWAP_ADC                       = 0
-  SWAP_USB                       = 0
+  SWAP_USBPWR                    = 0
+  SWAP_USBFN                     = 0
+  SWAP_USBCFG                    = 0
 
   #
   # 0 = SM6225
@@ -116,8 +118,4 @@
 !if $(PAUSE_LOG) == 2
 [BuildOptions]
   *_*_*_CC_FLAGS = -DPAUSE_ON_ERROR -DSLOW_STEP_US=0
-!endif
-!if $(PAUSE_LOG) == 3
-[BuildOptions]
-  *_*_*_CC_FLAGS = -DPAUSE_ON_ERROR -DSLOW_STEP_US=0 -DPAUSE_USB
 !endif
