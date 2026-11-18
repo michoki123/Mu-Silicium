@@ -1,0 +1,39 @@
+name: Build UEFI devon (usbmix)
+on:
+  workflow_dispatch:
+env:
+  CI_BUILD: true
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: m-devon, pwr: 1, fn: 1, cfg: 1 }
+          - { name: m-h1,    pwr: 1, fn: 0, cfg: 0 }
+          - { name: m-h2,    pwr: 0, fn: 0, cfg: 1 }
+    steps:
+      - uses: actions/checkout@v7
+      - name: Configurar variante (base adc-none + xHCI + OTG + pila USB mezclada)
+        run: |
+          f=Platforms/Motorola/devonPkg/devon.dsc
+          set_flag() { sed -i -E "s/(^[[:space:]]*$1[[:space:]]*=[[:space:]]*)[0-9]+/\1$2/" $f; }
+          set_flag SWAP_PMIC 1
+          set_flag MOT_EARLY 3
+          set_flag ADD_MOT 1
+          set_flag SWAP_ADC 2
+          set_flag ADD_XHCI 1
+          set_flag I2C_MODE 2
+          set_flag PAUSE_LOG 2
+          set_flag SWAP_USBPWR ${{ matrix.pwr }}
+          set_flag SWAP_USBFN ${{ matrix.fn }}
+          set_flag SWAP_USBCFG ${{ matrix.cfg }}
+          grep -n -E "SWAP_|DROP_|ADD_|I2C_MODE|PAUSE_LOG|MOT_EARLY" $f
+      - name: Build
+        run: bash ./setup_env.sh -p apt && python3 build_uefi.py -d devon -r DEBUG
+      - name: Subir imagen
+        uses: actions/upload-artifact@v7
+        with:
+          name: uefi-devon-${{ matrix.name }}
+          path: ./Mu-*
